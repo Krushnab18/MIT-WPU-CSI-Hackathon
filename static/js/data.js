@@ -1,47 +1,41 @@
-document.addEventListener('DOMContentLoaded', () => {
-    $('#start-calendar').fullCalendar({
-        header: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'month,agendaWeek,agendaDay'
-        },
-        editable: true,
-        droppable: true,
-        height: 'auto',
-        titleFormat: 'Start Date',
-        dayClick: function(date) {
-            $('#start-date-btn').text(`Start Date: ${date.format()}`);
+$(document).ready(function() {
+    var startPicker = new Pikaday({
+        field: document.getElementById('start-calendar'),
+        format: 'DD-MM-YYYY',
+        onSelect: function() {
+            $('#start-date-btn').text(this.getMoment().format('DD-MM-YYYY'));
             $('#start-calendar-popup').hide();
         }
     });
 
-    $('#end-calendar').fullCalendar({
-        header: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'month,agendaWeek,agendaDay'
-        },
-        editable: true,
-        droppable: true,
-        height: 'auto',
-        titleFormat: 'End Date',
-        dayClick: function(date) {
-            $('#end-date-btn').text(`End Date: ${date.format()}`);
+    var endPicker = new Pikaday({
+        field: document.getElementById('end-calendar'),
+        format: 'DD-MM-YYYY',
+        onSelect: function() {
+            $('#end-date-btn').text(this.getMoment().format('DD-MM-YYYY'));
             $('#end-calendar-popup').hide();
         }
     });
 
-    $('#start-date-btn').on('click', () => {
-        $('#start-calendar-popup').toggle();
+    $('#start-date-btn').on('click', function() {
+        if (!$('#start-calendar').val()) {
+            startPicker.setDate(new Date());
+        }
+        $('#start-calendar-popup').show();
+        startPicker.show();
     });
 
-    $('#end-date-btn').on('click', () => {
-        $('#end-calendar-popup').toggle();
+    $('#end-date-btn').on('click', function() {
+        if (!$('#end-calendar').val()) {
+            endPicker.setDate(new Date());
+        }
+        $('#end-calendar-popup').show();
+        endPicker.show();
     });
 
     $('#summarize-btn').on('click', () => {
-        const startDate = $('#start-date-btn').text().replace('Start Date: ', '');
-        const endDate = $('#end-date-btn').text().replace('End Date: ', '');
+        const startDate = $('#start-date-btn').text();
+        const endDate = $('#end-date-btn').text();
         alert(`Summarizing data from ${startDate} to ${endDate}`);
     });
 });

@@ -4,10 +4,16 @@ class ChatApp {
         this.firstMessageSent = false;
         this.apiKey = ''; // Move this to environment variables
         this.setupEventListeners();
+        this.setupAutoResize();
+        this.setupTypingIndicator();
+        this.setupMessageHistory();
+        this.setupSecurityMeasures();
+        this.setupLazyLoading();
+        this.setupMessageBatching();
     }
 
     getOrCreateConversationId() {
-        return localStorage.getItem('conversationId') || 'conv-' + Math.floor(Math.random() * 1000000);
+        return 'conv-' + Math.floor(Math.random() * 1000000);
     }
 
     setupEventListeners() {
@@ -53,7 +59,10 @@ class ChatApp {
     displayMessage(message, sender) {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message', sender);
-        messageDiv.textContent = message;
+        
+        // Render Markdown content
+        const converter = new showdown.Converter();
+        messageDiv.innerHTML = converter.makeHtml(message);
         
         const chatBox = document.getElementById('chat-box');
         chatBox.appendChild(messageDiv);
@@ -66,7 +75,6 @@ class ChatApp {
             formData.append('question', question);
             formData.append('training_data', 'You are Alex and you are one of the best Financial Analyst who is trained to understand and answer all kinds of financial data.');
             formData.append('model', 'aicon-v4-nano-160824');
-            formData.append('conversation_id', this.conversationId);
 
             if (isFirstMessage && files.length > 0) {
                 for (let file of files) {
@@ -88,7 +96,6 @@ class ChatApp {
                 this.displayMessage(data.content, 'bot');
                 if (isFirstMessage) {
                     this.firstMessageSent = true;
-                    localStorage.setItem('conversationId', this.conversationId);
                 }
             } else {
                 throw new Error(data.message || 'Failed to get response');
@@ -101,9 +108,7 @@ class ChatApp {
     clearChat() {
         const chatBox = document.getElementById('chat-box');
         chatBox.innerHTML = '';
-        this.conversationId = this.getOrCreateConversationId();
         this.firstMessageSent = false;
-        localStorage.removeItem('conversationId');
     }
 
     exportChat() {
@@ -125,7 +130,109 @@ class ChatApp {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     }
+
+    setupAutoResize() {
+        const textarea = document.getElementById('user-input');
+        textarea.addEventListener('input', () => {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        });
+    }
+
+    setupTypingIndicator() {
+        let typingTimer;
+        const userInput = document.getElementById('user-input');
+        
+        userInput.addEventListener('input', () => {
+            clearTimeout(typingTimer);
+            // Show typing indicator
+            document.querySelector('.status').textContent = 'Typing...';
+            
+            typingTimer = setTimeout(() => {
+                document.querySelector('.status').textContent = 'Active Session';
+            }, 1000);
+        });
+    }
+
+    setupMessageHistory() {
+        // Load previous messages from the database
+        // This method should be implemented to fetch messages from the database
+    }
+
+    setupSecurityMeasures() {
+        // Rate limiting
+        this.messageCount = 0;
+        this.lastMessageTime = Date.now();
+        
+        // Input sanitization
+        this.sanitizeInput = (input) => {
+            return input.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+                       .replace(/<[^>]*>/g, '');
+        };
+    }
+
+    setupLazyLoading() {
+        const chatBox = document.getElementById('chat-box');
+        const options = {
+            root: chatBox,
+            rootMargin: '20px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    observer.unobserve(img);
+                }
+            });
+        }, options);
+
+        // Observe images
+        document.querySelectorAll('img[data-src]').forEach(img => observer.observe(img));
+    }
+
+    setupMessageBatching() {
+        this.messageQueue = [];
+        this.batchSize = 5;
+        
+        setInterval(() => {
+            if (this.messageQueue.length > 0) {
+                const batch = this.messageQueue.splice(0, this.batchSize);
+                this.processBatch(batch);
+            }
+        }, 100);
+    }
 }
 
 // Initialize the app
 const chatApp = new ChatApp();
+
+document.addEventListener('DOMContentLoaded', () => {
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const chatBox = document.getElementById('chat-box');
+
+    async function sendMessage() {
+        const message = userInput.value.trim();
+        if (message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'user');
+            messageElement.textContent = message;
+            chatBox.appendChild(messageElement);
+            userInput.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+            await chatApp.handleSendMessage();
+        }
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+});

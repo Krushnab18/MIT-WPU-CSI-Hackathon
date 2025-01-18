@@ -50,8 +50,6 @@ body {
     align-items: center;
     gap: 10px;
     transition: background-color 0.3s;
-    position: relative;
-    overflow: hidden;
 }
 
 .sidebar-nav li:hover {
@@ -61,21 +59,6 @@ body {
 .sidebar-nav li.active {
     background-color: #6b00cc;
     border-left: 4px solid #b266ff;
-}
-
-.sidebar-nav li::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 2px;
-    width: 0;
-    background: #b266ff;
-    transition: width 0.3s ease;
-}
-
-.sidebar-nav li:hover::after {
-    width: 100%;
 }
 
 .sidebar-footer {
@@ -115,7 +98,7 @@ body {
     align-items: center;
 }
 
-.chat-container {
+.content {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -123,47 +106,13 @@ body {
     overflow-y: auto;
 }
 
-.chat-box {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    background-color: #fff;
-    overflow-y: auto;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.chat-message {
-    margin-bottom: 10px;
-}
-
-.chat-message strong {
-    color: #333;
-}
-
-.chat-message .timestamp {
-    font-size: 0.8em;
-    color: #999;
-    margin-left: 10px;
-}
-
-.chat-input {
+.button-group {
     display: flex;
-    border-top: 1px solid #ddd;
-    padding: 10px;
-    background-color: #fff;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
-#message-input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-right: 10px;
-}
-
-#send-button {
+button {
     padding: 10px 20px;
     background-color: #9100ff;
     color: white;
@@ -173,21 +122,36 @@ body {
     transition: background-color 0.3s;
 }
 
-#send-button:hover {
+button:hover {
     background-color: #6b00cc;
 }
 
-/* Add these to style.css and team.css */
-.message {
-    transition: all 0.3s ease;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeIn 0.3s forwards;
-  }
-  
-  @keyframes fadeIn {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+.calendar-popup {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.calendar-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+#start-calendar, #end-calendar {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
