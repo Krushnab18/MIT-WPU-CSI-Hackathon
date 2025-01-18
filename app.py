@@ -30,17 +30,25 @@ def login():
 
         # Check if user exists
         user = users.get(team_email)
-        
-        if user and user['team_id'] == team_id and user['role'] == role and user['password'] == password:
-            return redirect(url_for('dashboard', user=team_email))
+        if user and user['team_id'] == team_id and user['password'] == password:
+            if user['role'] == "manager":
+                return render_template('manage.html')
+            elif user['role'] == "employee":
+                return render_template('dashboard.html')
+
         else:
             return render_template('login.html', error="Invalid credentials, please try again.")
     return render_template('login.html')
+
 
 @app.route('/dashboard')
 def dashboard():
     user = request.args.get('user')
     return render_template('dashboard.html')
+
+@app.route('/manage')
+def manage():
+    return render_template('manage.html')
 @app.route('/team')
 def team():
     return render_template("team.html")
