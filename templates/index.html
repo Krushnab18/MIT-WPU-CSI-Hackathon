@@ -16,6 +16,17 @@
 </head>
 
 <style>
+  .card-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+figure img {
+  max-width: 100%;
+  height: auto;
+}
+
   .cent{
     justify-content: center;
     align-items: center;
@@ -257,37 +268,36 @@
   
     <!-- Call to action (v10) -->
     <section class="slice slice-lg">
-
       <div class="container">
-        
-        <div class="row">
-          <div class="col-md-6">
+        <div class="row align-items-center">
+
+          <div class="col-md-6 text-center">
+            <figure style="width: 250px; margin: auto;">
+              <img alt="CSI Logo" src="/static/images/csi.png" class="svg-inject img-fluid" style="height: 400px;">
+            </figure>
+          </div>
+          <!-- First Image -->
+          <div class="col-md-6 text-center">
             <div class="card bg-gradient-dark shadow hover-shadow-lg border-0 position-relative zindex-100">
               <div class="card-body py-5">
-                <div class="d-flex align-items-start">
-                <br>
-                    <figure style="width: 250px;">
-                      <img alt="Image placeholder" src="/static/images/Sponsor.png" class="svg-inject img-fluid" style="height: 100px;">
-                    </figure>
-                   
-                </div>
+                <figure style="width: 250px; margin: auto;">
+                  <img alt="Sponsor Logo" src="/static/images/Sponsor.png" class="svg-inject img-fluid" style="height: 100px;">
+                </figure>
               </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="card bg-primary shadow hover-shadow-lg border-0 position-relative zindex-100">
-              <div class="card-body py-5">
-                <div class="d-flex align-items-start">
-                  <figure style="width: 350px; justify-content: center;">
-                    <img alt="Image placeholder" src="/static/images/csi.png" class="svg-inject img-fluid" style="height: 100px;">
-                  </figure>
-                  </div>
-                </div>
-              </div>
-            </div>
+          
+          <!-- Second Image -->
+          <div class="col-md-6 text-center">
+            <figure style="width: 250px; margin: auto;">
+              <img alt="CSI Logo" src="/static/images/csi.png" class="svg-inject img-fluid" style="height: 200px;">
+            </figure>
           </div>
         </div>
       </div>
+      
+      
+
     </section>
   </div>
   <footer id="footer-main">
