@@ -40,8 +40,16 @@ def login():
 @app.route('/dashboard')
 def dashboard():
     user = request.args.get('user')
-    return f"Welcome to your dashboard, {user}!"
+    return render_template('dashboard.html')
+@app.route('/team')
+def team():
+    return render_template("team.html")
+
+@app.route('/data')
+def data():
+    return render_template("data.html")
+
 
 # Run the app
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=3000)

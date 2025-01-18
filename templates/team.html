@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Chat</title>
+    <link rel="stylesheet" href="/static/css/team.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script>
+    <script src="/static/js/team.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="/static/images/logoB.png" alt="Logo" style="width: 100%; height: auto;">
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active"><a href="/" class="nav-link" style="color: white; display: block; text-decoration: none;"><i class="fas fa-robot"></i> Chat</a></li>
+                    <li><a href="/team" class="nav-link" style="color: white; display: block; text-decoration: none;"><i class="fas fa-comments"></i> Team</a></li>
+                    <li><a href="/data" class="nav-link" style="color: white; display: block; text-decoration: none;"><i class="fas fa-calendar"></i> Summarizer</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <span class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span>User Account</span>
+                </span>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="conversation-info">
+                    <h2>Team Chat</h2>
+                    <span class="status">Active Session</span>
+                </div>
+            </header>
+            <div class="chat-container">
+                <div id="chat-box" class="chat-box"></div>
+                <div class="chat-input">
+                    <input type="text" id="message-input" placeholder="Type a message...">
+                    <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
