@@ -1,0 +1,22 @@
+Project Phoenix Summary
+
+Goal:
+Redesign the website to improve brand alignment, user experience, and increase lead generation by 30% in six months.
+
+Objectives:
+
+Optimize landing pages, CTAs, and mobile responsiveness.
+Improve brand perception and reduce bounce rates.
+Team Roles:
+
+Sarah (PM): Manage timelines and ensure alignment.
+Jamie (Marketing): Define brand voice; set up campaigns.
+Mia (Content): Focus on storytelling and SEO; gather case studies.
+Alex (UI/UX): Create minimalist, interactive, and accessible designs.
+Ravi (Dev): Ensure performance, optimize animations, and update CMS.
+Timeline:
+
+Research & Strategy: 2 weeks
+Wireframes & Design: 3 weeks
+Development & Testing: 5 weeks
+Content Upload & QA: 2 weeks (content freeze by week 7)

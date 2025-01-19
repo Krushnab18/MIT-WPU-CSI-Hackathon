@@ -18,11 +18,11 @@ body {
     flex-direction: column;
     justify-content: space-between;
     padding: 20px 0;
-    overflow-y: auto; /* Make sidebar scrollable */
-    resize: horizontal; /* Make sidebar resizable */
+    overflow-y: auto;
+    resize: horizontal;
     overflow: auto;
-    position: fixed; /* Fix the sidebar position */
-    height: 100%; /* Full height */
+    position: fixed;
+    height: 100%;
 }
 
 .sidebar-header {
@@ -79,7 +79,7 @@ body {
     display: flex;
     flex-direction: column;
     background-color: #fff;
-    margin-left: 260px; /* Adjust main content margin to accommodate fixed sidebar */
+    margin-left: 260px;
 }
 
 .top-bar {
@@ -154,4 +154,29 @@ button:hover {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 20px;
+}
+
+/* Added styles for error message and summary content */
+.error-message {
+    color: #ff0000;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    display: none;
+    font-weight: 500;
+}
+
+.summary-content {
+    background-color: #f8f9fa;
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    display: none;
+    line-height: 1.6;
+}
+
+/* Add hover effect for summary content */
+.summary-content:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
