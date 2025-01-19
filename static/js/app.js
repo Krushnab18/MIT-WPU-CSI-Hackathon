@@ -73,7 +73,7 @@ class ChatApp {
         try {
             const formData = new FormData();
             formData.append('question', question);
-            formData.append('training_data', 'You are Alex and you are one of the best Financial Analyst who is trained to understand and answer all kinds of financial data.');
+            formData.append('training_data', 'You are an helper AI and help people answer thier questions with proper context.');
             formData.append('model', 'aicon-v4-nano-160824');
 
             if (isFirstMessage && files.length > 0) {
