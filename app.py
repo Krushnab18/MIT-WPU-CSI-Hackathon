@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-
+import os
+from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
 # Dummy users for demonstration
@@ -94,6 +95,41 @@ def get_tasks():
         return jsonify({'tasks': []}), 200
 
 
+
+# pdf Upload 
+UPLOAD_FOLDER = 'uploads'  # Folder where uploaded files will be stored
+ALLOWED_EXTENSIONS = {'pdf'}  # Only allow PDF files
+
+# Ensure the upload folder exists
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# Configure app
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Max file size is 16 MB
+
+# Helper function to check file extension
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/upload-pdf', methods=['POST'])
+def upload_pdf():
+    if 'pdfFile' not in request.files:
+        return jsonify({'message': 'No file part'}), 400
+
+    file = request.files['pdfFile']
+
+    if file.filename == '':
+        return jsonify({'message': 'No selected file'}), 400
+
+    if file and allowed_file(file.filename):
+        # Secure the filename and save the file
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        
+        return jsonify({'message': 'PDF uploaded successfully!', 'file': filename}), 200
+    else:
+        return jsonify({'message': 'Invalid file type. Only PDF files are allowed.'}), 400
 
 
 

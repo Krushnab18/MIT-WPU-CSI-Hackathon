@@ -119,6 +119,24 @@
   color: darkred;
 }
   </style>
+
+<style>
+  /* Remove underline from navbar links */
+.sidebar-nav a.nav-link {
+  text-decoration: none;
+  color: white; /* Ensure text color is white */
+}
+
+.sidebar-nav a.nav-link:hover {
+  text-decoration: none; /* Ensure underline doesn't appear on hover */
+}
+
+/* Optional: Style for active link */
+.sidebar-nav li.active a.nav-link {
+  color: #ffcc00; /* Change active link color (if needed) */
+}
+
+</style>
 </head>
 <body>
   <div class="container">

@@ -5,6 +5,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Task Assignment Dashboard</title>
   <style>
+
+/* Styling for the file upload section */
+.form-group {
+  margin-bottom: 1rem; /* Space between fields */
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+input[type="file"] {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 0.8rem; /* Space between file input and button */
+}
+
+button {
+  padding: 0.8rem 1.5rem;
+  background-color: #2575fc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #6a11cb;
+}
+
+#upload-status {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #f39c12; /* Status text color */
+}
+
+/* Optional: Custom style for file input button */
+input[type="file"]::-webkit-file-upload-button {
+  background-color: #2575fc;
+  color: white;
+  padding: 0.8rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+  background-color: #6a11cb;
+}
+
+
+
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
@@ -152,10 +209,20 @@
       display: inline-block;
       align-self: flex-start;
     }
+
   </style>
+  <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
+
+
+  <br>
   <div class="dashboard">
+    <div class="container-12">
+      <a href="/">
+      <img src="/static/images/logoB.png" alt="Logo" style="width: 10%; height: 40;">
+    </a>
+</div>
     <div class="header">
       <h1>Manager's Task Assignment Dashboard</h1>
     </div>
@@ -191,6 +258,14 @@
       <div class="form-group">
         <button id="autoAssignTask">Automatically Assign Task Based on Skills</button>
       </div>
+
+      <div class="form-group">
+        <label for="file-upload">Add PDF About Project and Its Details:</label>
+        <input type="file" id="file-upload" accept=".pdf" />
+        <button id="upload-btn">Upload PDF</button>
+        <p id="upload-status"></p>
+    </div>
+    
     </div>
 
     <div class="task-list">
@@ -198,6 +273,8 @@
       <div id="tasks"></div>
     </div>
   </div>
+
+  
 
   <script>
     // Dummy data bhaii apna
@@ -367,6 +444,56 @@ function createTaskCard(taskDescription, assignedEmployee) {
   // Save the task to the Flask backend
   saveTasksToBackend(taskDescription, assignedEmployee);
 }
+
+
+
+
+
+document.getElementById('upload-btn').addEventListener('click', async function() {
+    const fileInput = document.getElementById('file-upload');
+    const file = fileInput.files[0]; // Get the selected file
+    const statusElement = document.getElementById('upload-status');
+    
+    if (!file) {
+        statusElement.textContent = 'Please select a PDF file to upload.';
+        statusElement.style.color = 'red';
+        return;
+    }
+
+    // Check if the file is a PDF
+    if (file.type !== 'application/pdf') {
+        statusElement.textContent = 'Please upload a valid PDF file.';
+        statusElement.style.color = 'red';
+        return;
+    }
+
+    // Show the status while uploading
+    statusElement.textContent = 'Uploading...';
+    statusElement.style.color = 'blue';
+
+    const formData = new FormData();
+    formData.append('pdfFile', file);
+
+    try {
+        // Send the PDF file to the backend
+        const response = await fetch('/upload-pdf', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            statusElement.textContent = 'PDF uploaded successfully!';
+            statusElement.style.color = 'green';
+        } else {
+            statusElement.textContent = 'Failed to upload PDF.';
+            statusElement.style.color = 'red';
+        }
+    } catch (error) {
+        statusElement.textContent = 'Error occurred during upload.';
+        statusElement.style.color = 'red';
+        console.error(error);
+    }
+});
 
 
 
