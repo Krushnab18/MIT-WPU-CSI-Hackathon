@@ -166,7 +166,7 @@ class ChatApp {
         
         // Input sanitization
         this.sanitizeInput = (input) => {
-            return input.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+            return input.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ' ')
                        .replace(/<[^>]*>/g, '');
         };
     }
@@ -217,13 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
     async function sendMessage() {
         const message = userInput.value.trim();
         if (message) {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message', 'user');
-            messageElement.textContent = message;
-            chatBox.appendChild(messageElement);
-            userInput.value = '';
-            chatBox.scrollTop = chatBox.scrollHeight;
-            await chatApp.handleSendMessage();
+            userInput.value = '';  // Reset input immediately
+            await chatApp.handleSendMessage();  // Handle sending the message
         }
     }
 

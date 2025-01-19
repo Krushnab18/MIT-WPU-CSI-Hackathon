@@ -1,0 +1,3 @@
+Nisarg: Create Ai Application With python
+Shripad: Create SQL database
+Shripad: Perform the Testing of AI Application Using Worqhat api

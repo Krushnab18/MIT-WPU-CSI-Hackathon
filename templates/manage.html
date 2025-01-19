@@ -308,6 +308,68 @@
 
       taskInput.value = "";
     });
+
+    function saveTasksToBackend(taskDescription, assignedEmployee) {
+  const taskData = {
+    employeeName: employees[assignedEmployee].name,
+    taskDescription: taskDescription,
+  };
+
+  // Send the task data to the Flask backend
+  fetch('/save-task', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(taskData),
+  })
+    .then((response) => {
+      if (response.ok) {
+        console.log('Task saved successfully');
+      } else {
+        console.error('Failed to save task');
+      }
+    })
+    .catch((error) => console.error('Error:', error));
+}
+
+// Modify the task creation to include saving to Flask
+function createTaskCard(taskDescription, assignedEmployee) {
+  const taskCard = document.createElement('div');
+  taskCard.className = 'task';
+
+  taskCard.innerHTML = `
+    <h3>${employees[assignedEmployee].name}: ${taskDescription}</h3>
+    <div class="status-buttons">
+      <button class="in-progress">In Progress</button>
+      <button class="completed">Completed</button>
+    </div>
+    <button class="remove-task">Remove Task</button>
+  `;
+
+  taskCard.querySelector('.remove-task').addEventListener('click', () => {
+    tasksContainer.removeChild(taskCard);
+  });
+
+  taskCard.querySelector('.in-progress').addEventListener('click', () => {
+    taskCard.querySelector('.in-progress').disabled = true;
+    taskCard.querySelector('.completed').disabled = false;
+    taskCard.querySelector('h3').style.color = '#f39c12'; // In progress color
+  });
+  taskCard.querySelector('.completed').addEventListener('click', () => {
+    taskCard.querySelector('.completed').disabled = true;
+    taskCard.querySelector('.in-progress').disabled = false;
+    taskCard.querySelector('h3').style.color = '#27ae60'; // Completed color
+  });
+
+  tasksContainer.appendChild(taskCard);
+
+  // Save the task to the Flask backend
+  saveTasksToBackend(taskDescription, assignedEmployee);
+}
+
+
+
   </script>
 </body>
 </html>

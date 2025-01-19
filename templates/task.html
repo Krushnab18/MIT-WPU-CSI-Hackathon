@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tasks</title>
+
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script>
+
+
+  <style>
+    .task {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.task-checkbox {
+  margin-right: 10px;
+}
+
+.task-description {
+  flex-grow: 1;
+}
+
+.remove-task {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.remove-task:hover {
+  color: darkred;
+}
+
+    body {
+      font-family: Arial, sans-serif;
+
+      background-color: #f4f4f4;
+    }
+    .task-container {
+      max-width: 1000px;
+      margin: 0 auto;
+
+      padding: 100px;
+
+    }
+    h1 {
+  text-align: center;
+  color: #2575fc;
+}
+.task {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+    #task-list {
+  margin-top: 2rem;
+}
+    .task:last-child {
+      border-bottom: none;
+    }
+    .task h3 {
+  margin: 0;
+  flex-grow: 1;
+  font-size: 1.1rem;
+}
+
+.status-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+.status-buttons button {
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.in-progress {
+  background-color: #f39c12;
+}
+
+.in-progress:hover {
+  background-color: #e67e22;
+}
+
+.completed {
+  background-color: #27ae60;
+}
+
+.completed:hover {
+  background-color: #2ecc71;
+}
+
+.remove-task {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: color 0.3s;
+}
+
+.remove-task:hover {
+  color: darkred;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+        <img src="/static/images/logoB.png" alt="Logo" style="width: 100%; height: auto;">
+    </div>
+    <nav class="sidebar-nav" style="text-decoration: none;">
+        <ul>
+            <li class="active"><a href="/dashboard" class="nav-link" style="color: white;"><i class="fas fa-robot" style="color: white;"></i> Chat</a></li>
+            <li><a href="/tasks" class="nav-link" style="color: white;"><i class="fas fa-calendar" style="color: white;"></i> Assigned Task</a></li>
+           
+            <li><a href="/team" class="nav-link" style="color: white;"><i class="fas fa-comments" style="color: white;"></i> Team</a></li>
+            
+            <li><a href="/data" class="nav-link" style="color: white;"><i class="fas fa-calendar" style="color: white;"></i> Summarizer</a></li>
+        </ul>
+    </nav>
+    <div class="sidebar-footer">
+        <span class="user-info">
+            <i class="fas fa-user-circle"></i>
+            <span>User Account</span>
+        </span>
+    </div>
+</aside>
+
+  <div class="task-container">
+    <h1>Assigned Tasks</h1>
+    <div id="task-list">
+      <!-- Tasks will be displayed here -->
+    </div>
+  </div>
+</div>
+  <script>
+  async function fetchTasks() {
+  try {
+    const response = await fetch('/get-tasks');
+    const data = await response.json();
+
+    const taskList = document.getElementById('task-list');
+    taskList.innerHTML = ''; // Clear existing tasks
+
+    if (data.tasks.length > 0) {
+      data.tasks.forEach(task => {
+        const taskDiv = document.createElement('div');
+        taskDiv.className = 'task';
+
+        // Create a checkbox for marking task completion
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'task-checkbox';
+
+        // Create a span to hold the task description
+        const taskDescription = document.createElement('span');
+        taskDescription.className = 'task-description';
+        taskDescription.textContent = task.trim();
+
+        // Create a remove button
+        const removeButton = document.createElement('button');
+        removeButton.className = 'remove-task';
+        removeButton.textContent = '×';
+
+        // Append elements to the task div
+        taskDiv.appendChild(checkbox);
+        taskDiv.appendChild(taskDescription);
+        taskDiv.appendChild(removeButton);
+
+        // Append the task div to the task list
+        taskList.appendChild(taskDiv);
+
+        // Add event listener to the remove button
+        removeButton.addEventListener('click', () => {
+          taskList.removeChild(taskDiv);
+        });
+
+        // Add event listener to the checkbox
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) {
+            taskDescription.style.textDecoration = 'line-through';
+            taskDescription.style.color = '#7f8c8d';
+          } else {
+            taskDescription.style.textDecoration = 'none';
+            taskDescription.style.color = '#333';
+          }
+        });
+      });
+    } else {
+      taskList.innerHTML = '<p>No tasks available.</p>';
+    }
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+  }
+}
+
+// Call the function to fetch and display tasks
+fetchTasks();
+
+    // Fetch tasks when the page loads
+    window.onload = fetchTasks;
+  </script>
+</body>
+</html>

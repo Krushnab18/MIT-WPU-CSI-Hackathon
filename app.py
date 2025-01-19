@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 
 app = Flask(__name__)
 
@@ -56,6 +56,46 @@ def team():
 @app.route('/data')
 def data():
     return render_template("data.html")
+
+
+
+
+# File to store tasks
+TASK_FILE = 'tasks.txt'
+
+@app.route('/save-task', methods=['POST'])
+def save_task():
+    data = request.get_json()
+    employee_name = data.get('employeeName')
+    task_description = data.get('taskDescription')
+
+    if not employee_name or not task_description:
+        return jsonify({'error': 'Invalid data'}), 400
+
+    # Append the task to the file
+    with open(TASK_FILE, 'a') as f:
+        f.write(f'{employee_name}: {task_description}\n')
+
+    return jsonify({'message': 'Task saved successfully'}), 200
+
+
+@app.route('/tasks', methods=['GET'])
+def tasks_page():
+    return render_template('task.html')
+
+
+@app.route('/get-tasks', methods=['GET'])
+def get_tasks():
+    try:
+        with open(TASK_FILE, 'r') as f:
+            tasks = f.readlines()
+        return jsonify({'tasks': tasks}), 200
+    except FileNotFoundError:
+        return jsonify({'tasks': []}), 200
+
+
+
+
 
 
 # Run the app
