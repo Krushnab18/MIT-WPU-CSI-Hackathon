@@ -40,7 +40,7 @@ The **AI-Driven Workforce Scheduling and Collaboration Platform** is an innovati
 ---
 
 ### **Architecture**
-![Architecture Diagram](/static/images/architecture_diagram.png)
+![Architecture Diagram](./static/images/architecture.jpeg)
 
 
 ---
